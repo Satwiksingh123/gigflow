@@ -20,6 +20,8 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: TOKEN_STORAGE_KEY,
+      // Only persist auth data — not derived/transient UI state
+      partialize: (state) => ({ token: state.token, user: state.user }),
     },
   ),
 );

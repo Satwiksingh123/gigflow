@@ -18,13 +18,17 @@ function buildFilter(
   const filter: FilterQuery<ILead> = {};
 
   // Sales reps can only see leads they own; admins see everything
-  // TODO: implement ownership filtering
+  if (role !== "admin") {
+    filter.owner = userId;
+  }
 
   if (query.status) filter.status = query.status;
   if (query.source) filter.source = query.source;
 
   if (query.search) {
-    const regex = new RegExp(query.search, "i");
+    // Escape regex special characters to prevent ReDoS
+    const escaped = query.search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const regex = new RegExp(escaped, "i");
     filter.$or = [{ name: regex }, { email: regex }];
   }
 

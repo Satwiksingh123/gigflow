@@ -26,17 +26,19 @@ export function useLeads(query: LeadQuery): UseLeadsResult {
   const [loading, setLoading] = useState(true);
 
   const fetchLeads = useCallback(
-    async () => {
+    async (signal?: { cancelled: boolean }) => {
       setLoading(true);
       try {
         const result = await leadApi.list(query);
+        if (signal?.cancelled) return;
         setLeads(result.items);
         setTotal(result.total);
         setTotalPages(result.totalPages);
       } catch (err) {
+        if (signal?.cancelled) return;
         toast.error(extractError(err, "Failed to load leads"));
       } finally {
-        setLoading(false);
+        if (!signal?.cancelled) setLoading(false);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -44,7 +46,11 @@ export function useLeads(query: LeadQuery): UseLeadsResult {
   );
 
   useEffect(() => {
-    fetchLeads();
+    const signal = { cancelled: false };
+    fetchLeads(signal);
+    return () => {
+      signal.cancelled = true;
+    };
   }, [fetchLeads]);
 
   /**
