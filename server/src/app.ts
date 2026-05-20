@@ -17,7 +17,9 @@ export function createApp(): Express {
         "http://localhost:5173",
         "http://127.0.0.1:5173",
         "http://localhost:5174",
-        "http://127.0.0.1:5174"
+        "http://127.0.0.1:5174",
+        "https://gigfloww-git-main-satwik-singhs-projects-ecd891d6.vercel.app",
+        "https://gigfloww-cyan.vercel.app",
       ],
       credentials: true,
     })
