@@ -1,4 +1,4 @@
-import type { FilterQuery, SortOrder } from "mongoose";
+import { Types, type FilterQuery, type SortOrder } from "mongoose";
 import { Lead, type ILead } from "../models/Lead";
 import { AppError } from "../utils/AppError";
 import type { PaginatedResult, UserRole, LeadStatus, LeadStats } from "../types";
@@ -125,7 +125,7 @@ export const leadService = {
    */
   async stats(userId: string, role: UserRole): Promise<LeadStats> {
     const matchStage =
-      role === "admin" ? {} : { owner: userId };
+      role === "admin" ? {} : { owner: new Types.ObjectId(userId) };
 
     const pipeline = [
       { $match: matchStage },

@@ -22,7 +22,7 @@ export const leadQuerySchema = z.object({
   search: z.string().trim().max(120).optional(),
   sort: z.enum(["latest", "oldest"]).default("latest"),
   page: z.coerce.number().int().min(1).default(1),
-  limit: z.coerce.number().int().min(1).max(100).default(10),
+  limit: z.coerce.number().int().min(1).max(1000).default(10),
 });
 
 export type CreateLeadInput = z.infer<typeof createLeadSchema>;
